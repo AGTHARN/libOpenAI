@@ -1,0 +1,9 @@
+{
+    "name": "agtharn/libopenai",
+    "type": "library",
+    "description": "",
+    "require-dev": {
+      "pocketmine/pocketmine-mp": "dev-stable",
+      "phpstan/phpstan": "^1.9.8"
+    }
+  }

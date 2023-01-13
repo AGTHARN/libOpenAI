@@ -1,0 +1,16 @@
+parameters:
+    level: 6
+
+    checkAlwaysTrueInstanceof: true
+    checkFunctionNameCase: true
+    checkInternalClassCaseSensitivity: true
+    reportMaybesInMethodSignatures: true
+    reportMaybesInPropertyPhpDocTypes: true
+    reportStaticMethodSignatures: true
+    checkDynamicProperties: true
+    checkMissingIterableValueType: false
+    reportUnmatchedIgnoredErrors: false
+
+    paths:
+        - src
+        - examples

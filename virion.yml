@@ -1,0 +1,9 @@
+# █░░ █ █▄▄ █▀█ █▀█ █▀▀ █▄░█ ▄▀█ █
+# █▄▄ █ █▄█ █▄█ █▀▀ ██▄ █░▀█ █▀█ █
+# Please avoid direct modification of this library unless you know what you're doing.
+
+name: libOpenAI
+antigen: AGTHARN\libOpenAI
+author: AGTHARN
+version: 1.0.0
+api: 4.0.0
