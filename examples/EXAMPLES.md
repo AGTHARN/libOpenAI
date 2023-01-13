@@ -80,13 +80,12 @@ public static function create(
 
 Usage of `ImagesAPI::create()`:
 ```php
-// Run the downloading of the image asynchronously please, this is just an example. 
-ImagesAPI::create('YOUR_API_KEY', 'artificial intelligence', [], function (?array $result) {
+// NOTE: use the asynchronous callback parameter provided to prevent file_put_contents from blocking the main thread
+ImagesAPI::create('YOUR_API_KEY', $prompt, [], null, function (?array $result) use ($dataFolder) {
     if ($result !== null) {
         $image = file_get_contents($result['data'][0]['url']);
         if ($image !== false) {
-            $this->getServer()->broadcastMessage(TextFormat::GREEN . 'Image downloaded!');
-            file_put_contents($this->getDataFolder() . 'image.png', $image);
+            file_put_contents($dataFolder . 'image.png', $image);
         }
     }
 });

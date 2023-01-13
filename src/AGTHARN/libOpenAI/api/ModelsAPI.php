@@ -20,13 +20,15 @@ class ModelsAPI
      *
      * @param string $apiKey Your OpenAI API key
      * @param callable|null $callback Callback function to run when the request is complete
+     * @param callable|null $callbackAsync Callback function to run when the request is complete (async)
      * @return int|array|null
      */
     public static function list(
         string $apiKey,
-        ?callable $callback = null
+        ?callable $callback = null,
+        ?callable $callbackAsync = null
     ): mixed {
-        return Helper::sendRequest('GET', $apiKey, '', self::API_V1, $callback);
+        return Helper::sendRequest('GET', $apiKey, '', self::API_V1, $callback, $callbackAsync);
     }
 
     /**
@@ -36,14 +38,16 @@ class ModelsAPI
      * @param string $apiKey Your OpenAI API key
      * @param string $model The ID of the model to use for this request
      * @param callable|null $callback Callback function to run when the request is complete
+     * @param callable|null $callbackAsync Callback function to run when the request is complete (async)
      * @return int|array|null
      */
     public static function retrieve(
         string $apiKey,
         string $model,
-        ?callable $callback = null
+        ?callable $callback = null,
+        ?callable $callbackAsync = null
     ): mixed {
-        return Helper::sendRequest('GET', $apiKey, '', self::API_V1 . '/' . $model, $callback);
+        return Helper::sendRequest('GET', $apiKey, '', self::API_V1 . '/' . $model, $callback, $callbackAsync);
     }
 
     /**
@@ -55,13 +59,15 @@ class ModelsAPI
      * @param string $apiKey Your OpenAI API key
      * @param string $model The model to delete
      * @param callable|null $callback Callback function to run when the request is complete
+     * @param callable|null $callbackAsync Callback function to run when the request is complete (async)
      * @return int|array|null
      */
     public static function delete(
         string $apiKey,
         string $model,
-        ?callable $callback = null
+        ?callable $callback = null,
+        ?callable $callbackAsync = null
     ): mixed {
-        return Helper::sendRequest('DELETE', $apiKey, '', ModelsAPI::API_V1 . '/' . $model, $callback);
+        return Helper::sendRequest('DELETE', $apiKey, '', ModelsAPI::API_V1 . '/' . $model, $callback, $callbackAsync);
     }
 }

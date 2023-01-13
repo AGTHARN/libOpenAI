@@ -21,16 +21,18 @@ class ModerationsAPI
      * @param string $input The input text to classify
      * @param array $extraData Extra data for the request body
      * @param callable|null $callback Callback function to run when the request is complete
+     * @param callable|null $callbackAsync Callback function to run when the request is complete (async)
      * @return int|array|null
      */
     public static function create(
         string $apiKey,
         string $input,
         array $extraData = [], // nothing extra but this is incase of api changes
-        ?callable $callback = null
+        ?callable $callback = null,
+        ?callable $callbackAsync = null
     ): mixed {
         return Helper::sendRequest('POST', $apiKey, json_encode(array_merge([
             'input' => $input
-        ], $extraData)), self::API_V1, $callback);
+        ], $extraData)), self::API_V1, $callback, $callbackAsync);
     }
 }

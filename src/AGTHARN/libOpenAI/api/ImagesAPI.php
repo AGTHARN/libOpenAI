@@ -24,17 +24,19 @@ class ImagesAPI
      * @param string $prompt A text description of the desired image(s). The maximum length is 1000 characters.
      * @param array $extraData Extra data for the request body
      * @param callable|null $callback Callback function to run when the request is complete
+     * @param callable|null $callbackAsync Callback function to run when the request is complete (async)
      * @return int|array|null
      */
     public static function create(
         string $apiKey,
         string $prompt,
         array $extraData = [],
-        ?callable $callback = null
+        ?callable $callback = null,
+        ?callable $callbackAsync = null
     ): mixed {
         return Helper::sendRequest('POST', $apiKey, json_encode(array_merge([
             'prompt' => $prompt
-        ], $extraData)), self::API_V1_GENERATIONS, $callback);
+        ], $extraData)), self::API_V1_GENERATIONS, $callback, $callbackAsync);
     }
 
     /**
@@ -45,6 +47,7 @@ class ImagesAPI
      * @param string $prompt A text description of the desired image(s). The maximum length is 1000 characters.
      * @param array $extraData Extra data for the request body
      * @param callable|null $callback Callback function to run when the request is complete
+     * @param callable|null $callbackAsync Callback function to run when the request is complete (async)
      * @return int|array|null
      */
     public static function createEdit(
@@ -52,12 +55,13 @@ class ImagesAPI
         string $image,
         string $prompt,
         array $extraData = [],
-        ?callable $callback = null
+        ?callable $callback = null,
+        ?callable $callbackAsync = null
     ): mixed {
         return Helper::sendRequest('POST', $apiKey, json_encode(array_merge([
             'image' => $image,
             'prompt' => $prompt
-        ], $extraData)), self::API_V1_EDITS, $callback);
+        ], $extraData)), self::API_V1_EDITS, $callback, $callbackAsync);
     }
 
     /**
@@ -67,16 +71,18 @@ class ImagesAPI
      * @param string $image The image to use as the basis for the variation(s). Must be a valid PNG file, less than 4MB, and square.
      * @param array $extraData Extra data for the request body
      * @param callable|null $callback Callback function to run when the request is complete
+     * @param callable|null $callbackAsync Callback function to run when the request is complete (async)
      * @return int|array|null
      */
     public static function createVariation(
         string $apiKey,
         string $image,
         array $extraData = [],
-        ?callable $callback = null
+        ?callable $callback = null,
+        ?callable $callbackAsync = null
     ): mixed {
         return Helper::sendRequest('POST', $apiKey, json_encode(array_merge([
             'image' => $image
-        ], $extraData)), self::API_V1_VARIATIONS, $callback);
+        ], $extraData)), self::API_V1_VARIATIONS, $callback, $callbackAsync);
     }
 }

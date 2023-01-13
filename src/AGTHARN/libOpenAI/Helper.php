@@ -21,6 +21,7 @@ class Helper
      * @param string $data The data to send to the API
      * @param string $apiURL OpenAI API URL
      * @param callable|null $callback Callback function to run when the request is complete
+     * @param callable|null $callbackAsync Callback function to run when the request is complete (async)
      * @param int $timeout The timeout in seconds
      * @return int|array|null
      */
@@ -30,9 +31,10 @@ class Helper
         string $data = '',
         string $apiURL = CompletionsAPI::API_V1,
         ?callable $callback = null,
+        ?callable $callbackAsync = null,
         int $timeout = 10
     ): mixed {
-        return $callback === null ? self::sendNormalRequest($requestType, $apiKey, $data, $apiURL, $timeout) : self::sendAsyncRequest($callback, $requestType, $apiKey, $data, $apiURL, $timeout);
+        return ($callback === null && $callbackAsync === null) ? self::sendNormalRequest($requestType, $apiKey, $data, $apiURL, $timeout) : self::sendAsyncRequest($callback, $callbackAsync, $requestType, $apiKey, $data, $apiURL, $timeout);
     }
 
     /**
@@ -71,6 +73,7 @@ class Helper
      * Sends a request and returns a response (asynchronously).
      *
      * @param callable $callback The callback to run when the request is completed
+     * @param callable $callbackAsync The callback to run when the request is completed (async)
      * @param string $requestType The request type, e.g. POST, GET, etc.
      * @param string $apiKey Your OpenAI API key
      * @param string $data The data to send to the API
@@ -80,7 +83,8 @@ class Helper
      * @return int The worker ID
      */
     public static function sendAsyncRequest(
-        callable $callback,
+        ?callable $callback,
+        ?callable $callbackAsync,
         string $requestType,
         string $apiKey,
         string $data = '',
@@ -88,10 +92,11 @@ class Helper
         int $timeout = 10,
         bool $isResultArray = true // false for object result
     ): int {
-        return Server::getInstance()->getAsyncPool()->submitTask(new class($callback, $requestType, $apiKey, $data, $apiURL, $timeout, $isResultArray) extends AsyncTask
+        return Server::getInstance()->getAsyncPool()->submitTask(new class($callback, $callbackAsync, $requestType, $apiKey, $data, $apiURL, $timeout, $isResultArray) extends AsyncTask
         {
             public function __construct(
-                private Closure $callback,
+                private ?Closure $callback,
+                private ?Closure $callbackAsync,
                 private string $requestType,
                 private string $apiKey,
                 private string $data,
@@ -113,17 +118,31 @@ class Helper
                 ])->getBody(), $this->isResultArray);
 
                 $this->setResult($decoded);
+                if ($this->isResultArray && isset($decoded['error']['message'])) {
+                    throw new \Exception($decoded['error']['message']);
+                } elseif (!$this->isResultArray && isset($decoded->error->message)) {
+                    throw new \Exception($decoded->error->message);
+                }
+
+                $callbackAsync = $this->callbackAsync;
+                if ($callbackAsync instanceof Closure) {
+                    $callbackAsync($decoded);
+                }
             }
 
             public function onCompletion(): void
             {
                 $result = $this->getResult();
-                if (isset($result['error'])) {
+                if ($this->isResultArray && isset($result['error']['message'])) {
                     throw new \Exception($result['error']['message']);
+                } elseif (!$this->isResultArray && isset($result->error->message)) {
+                    throw new \Exception($result->error->message);
                 }
 
                 $callback = $this->callback;
-                $callback($result);
+                if ($callback instanceof Closure) {
+                    $callback($result);
+                }
             }
         });
     }

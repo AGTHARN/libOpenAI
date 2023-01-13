@@ -22,6 +22,7 @@ class EditsAPI
      * @param string $model ID of the model to use. You can use the List models API to see all of your available models, or see OpenAI's Model overview for descriptions of them.
      * @param array $extraData Extra data for the request body
      * @param callable|null $callback Callback function to run when the request is complete
+     * @param callable|null $callbackAsync Callback function to run when the request is complete (async)
      * @return int|array|null
      */
     public static function create(
@@ -30,12 +31,13 @@ class EditsAPI
         string $instruction,
         string $model = 'text-davinci-edit-001',
         array $extraData = [],
-        ?callable $callback = null
+        ?callable $callback = null,
+        ?callable $callbackAsync = null
     ): mixed {
         return Helper::sendRequest('POST', $apiKey, json_encode(array_merge([
             'model' => $model,
             'input' => $input,
             'instruction' => $instruction
-        ], $extraData)), self::API_V1, $callback);
+        ], $extraData)), self::API_V1, $callback, $callbackAsync);
     }
 }

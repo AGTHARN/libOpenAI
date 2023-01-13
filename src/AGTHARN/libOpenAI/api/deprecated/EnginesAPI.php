@@ -24,13 +24,15 @@ class EnginesAPI
      * @deprecated The Engines endpoints are DEPRECATED.
      * @param string $apiKey Your OpenAI API key
      * @param callable|null $callback Callback function to run when the request is complete
+     * @param callable|null $callbackAsync Callback function to run when the request is complete (async)
      * @return int|array|null
      */
     public static function list(
         string $apiKey,
-        ?callable $callback = null
+        ?callable $callback = null,
+        ?callable $callbackAsync = null
     ): mixed {
-        return Helper::sendRequest('GET', $apiKey, '', self::API_V1, $callback);
+        return Helper::sendRequest('GET', $apiKey, '', self::API_V1, $callback, $callbackAsync);
     }
 
     /**
@@ -40,13 +42,15 @@ class EnginesAPI
      * @param string $apiKey Your OpenAI API key
      * @param string $engine_id The ID of the engine to use for this request
      * @param callable|null $callback Callback function to run when the request is complete
+     * @param callable|null $callbackAsync Callback function to run when the request is complete (async)
      * @return int|array|null
      */
     public static function retrieve(
         string $apiKey,
         string $engine_id,
-        ?callable $callback = null
+        ?callable $callback = null,
+        ?callable $callbackAsync = null
     ): mixed {
-        return Helper::sendRequest('GET', $apiKey, '', self::API_V1 . '/' . $engine_id, $callback);
+        return Helper::sendRequest('GET', $apiKey, '', self::API_V1 . '/' . $engine_id, $callback, $callbackAsync);
     }
 }

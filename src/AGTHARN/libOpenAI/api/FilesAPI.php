@@ -19,13 +19,15 @@ class FilesAPI
      *
      * @param string $apiKey Your OpenAI API key
      * @param callable|null $callback Callback function to run when the request is complete
+     * @param callable|null $callbackAsync Callback function to run when the request is complete (async)
      * @return int|array|null
      */
     public static function list(
         string $apiKey,
-        ?callable $callback = null
+        ?callable $callback = null,
+        ?callable $callbackAsync = null
     ): mixed {
-        return Helper::sendRequest('GET', $apiKey, '', self::API_V1, $callback);
+        return Helper::sendRequest('GET', $apiKey, '', self::API_V1, $callback, $callbackAsync);
     }
 
     /**
@@ -38,6 +40,7 @@ class FilesAPI
      * @param string $purpose The intended purpose of the uploaded documents.
      * @param array $extraData Extra data for the request body
      * @param callable|null $callback Callback function to run when the request is complete
+     * @param callable|null $callbackAsync Callback function to run when the request is complete (async)
      * @return int|array|null
      */
     public static function upload(
@@ -45,12 +48,13 @@ class FilesAPI
         string $file,
         string $purpose,
         array $extraData = [], // nothing extra but this is incase of api changes
-        ?callable $callback = null
+        ?callable $callback = null,
+        ?callable $callbackAsync = null
     ): mixed {
         return Helper::sendRequest('POST', $apiKey, json_encode(array_merge([
             'file' => $file,
             'purpose' => $purpose
-        ], $extraData)), self::API_V1, $callback);
+        ], $extraData)), self::API_V1, $callback, $callbackAsync);
     }
 
     /**
@@ -59,14 +63,16 @@ class FilesAPI
      * @param string $apiKey Your OpenAI API key
      * @param string $fileId
      * @param callable|null $callback Callback function to run when the request is complete
+     * @param callable|null $callbackAsync Callback function to run when the request is complete (async)
      * @return int|array|null
      */
     public static function delete(
         string $apiKey,
         string $fileId,
-        ?callable $callback = null
+        ?callable $callback = null,
+        ?callable $callbackAsync = null
     ): mixed {
-        return Helper::sendRequest('DELETE', $apiKey, '', self::API_V1 . '/' . $fileId, $callback);
+        return Helper::sendRequest('DELETE', $apiKey, '', self::API_V1 . '/' . $fileId, $callback, $callbackAsync);
     }
 
     /**
@@ -75,14 +81,16 @@ class FilesAPI
      * @param string $apiKey Your OpenAI API key
      * @param string $fileId The ID of the file to use for this request
      * @param callable|null $callback Callback function to run when the request is complete
+     * @param callable|null $callbackAsync Callback function to run when the request is complete (async)
      * @return int|array|null
      */
     public static function retrieve(
         string $apiKey,
         string $fileId,
-        ?callable $callback = null
+        ?callable $callback = null,
+        ?callable $callbackAsync = null
     ): mixed {
-        return Helper::sendRequest('GET', $apiKey, '', self::API_V1 . '/' . $fileId, $callback);
+        return Helper::sendRequest('GET', $apiKey, '', self::API_V1 . '/' . $fileId, $callback, $callbackAsync);
     }
 
     /**
@@ -91,13 +99,15 @@ class FilesAPI
      * @param string $apiKey Your OpenAI API key
      * @param string $fileId The ID of the file to use for this request
      * @param callable|null $callback Callback function to run when the request is complete
+     * @param callable|null $callbackAsync Callback function to run when the request is complete (async)
      * @return int|array|null
      */
     public static function retrieveContent(
         string $apiKey,
         string $fileId,
-        ?callable $callback = null
+        ?callable $callback = null,
+        ?callable $callbackAsync = null
     ): mixed {
-        return Helper::sendRequest('GET', $apiKey, '', self::API_V1 . '/' . $fileId . '/content', $callback);
+        return Helper::sendRequest('GET', $apiKey, '', self::API_V1 . '/' . $fileId . '/content', $callback, $callbackAsync);
     }
 }

@@ -8,7 +8,6 @@ use pocketmine\event\Listener;
 use pocketmine\plugin\PluginBase;
 use AGTHARN\libOpenAI\api\ImagesAPI;
 use pocketmine\event\player\PlayerChatEvent;
-use pocketmine\utils\TextFormat;
 
 class ImageExample extends PluginBase implements Listener
 {
@@ -21,14 +20,13 @@ class ImageExample extends PluginBase implements Listener
     {
         if (count($this->getServer()->getOnlinePlayers()) === 1 && str_contains($event->getMessage(), 'create image: ')) {
             $prompt = str_replace('create image: ', '', $event->getMessage());
+            $dataFolder = $this->getDataFolder();
 
-            // Run the downloading of the image asynchronously please, this is just an example. 
-            ImagesAPI::create('YOUR_API_KEY', $prompt, [], function (?array $result) {
+            ImagesAPI::create('YOUR_API_KEY', $prompt, [], null, function (?array $result) use ($dataFolder) {
                 if ($result !== null) {
                     $image = file_get_contents($result['data'][0]['url']);
                     if ($image !== false) {
-                        $this->getServer()->broadcastMessage(TextFormat::GREEN . 'Image downloaded!');
-                        file_put_contents($this->getDataFolder() . 'image.png', $image);
+                        file_put_contents($dataFolder . 'image.png', $image);
                     }
                 }
             });
