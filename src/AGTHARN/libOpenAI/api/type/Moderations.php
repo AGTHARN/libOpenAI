@@ -18,14 +18,14 @@ class Moderations extends API
     /**
      * Classifies if text violates OpenAI's Content Policy
      *
-     * @param string $input The input text to classify
+     * @param string|array $input The input text to classify
      * @param array $extraData Extra data for the request body
      * @param callable|null $callback Callback function to run when the request is complete
      * @param callable|null $callbackAsync Callback function to run when the request is complete (async)
      * @return int|array|null
      */
     public function create(
-        string $input,
+        string|array $input,
         array $extraData = [], // nothing extra but this is incase of api changes
         ?callable $callback = null,
         ?callable $callbackAsync = null

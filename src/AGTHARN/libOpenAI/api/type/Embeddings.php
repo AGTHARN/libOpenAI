@@ -18,7 +18,7 @@ class Embeddings extends API
     /**
      * Creates an embedding vector representing the input text.
      * 
-     * @param string $input Input text to get embeddings for, encoded as a string or array of tokens. To get embeddings for multiple inputs in a single request, pass an array of strings or array of token arrays. Each input must not exceed 8192 tokens in length.
+     * @param string|array $input Input text to get embeddings for, encoded as a string or array of tokens. To get embeddings for multiple inputs in a single request, pass an array of strings or array of token arrays. Each input must not exceed 8192 tokens in length.
      * @param string $model ID of the model to use. You can use the List models API to see all of your available models, or see OpenAI's Model overview for descriptions of them.
      * @param array $extraData Extra data for the request body
      * @param callable|null $callback Callback function to run when the request is complete
@@ -26,7 +26,7 @@ class Embeddings extends API
      * @return int|array|null
      */
     public function create(
-        string $input,
+        string|array $input,
         string $model,
         array $extraData = [],
         ?callable $callback = null,
