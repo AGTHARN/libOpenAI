@@ -5,6 +5,7 @@ This document is not yet completed! You may fully explore your options with the 
 - [Completions](#%EF%B8%8F-completions)
 - [Edits](#%EF%B8%8F-edits)
 - [Images](#%EF%B8%8F-images)
+- [Moderations](#%EF%B8%8F-moderations)
 
 ## ➡️ Completions
 Given a prompt, the model will return one or more predicted completions, and can also return the probabilities of alternative tokens at each position.
@@ -61,3 +62,20 @@ Client::init('YOUR_API_KEY')->images()->create('minecraft', [], null, function (
 prompt: `minecraft`
 
 ![image](https://media.discordapp.net/attachments/489366022172966922/1063619319302463529/image.png?width=300&height=300)
+
+
+## ➡️ Moderations
+Given a input text, outputs if the model classifies it as violating OpenAI's content policy. Related guide: [Moderations](https://beta.openai.com/docs/guides/moderation).
+
+[Example Plugin](https://github.com/AGTHARN/libOpenAI/tree/main/examples/ModerationExample)
+
+Usage:
+```php
+Client::init('YOUR_API_KEY')->moderations()->create('I want to kill them.', [], function (?array $result) use ($player) {
+    if ($result !== null && $result['results'][0]['flagged']) {
+        $player->sendMessage('Your message was flagged as inappropriate!');
+    }
+});
+```
+
+![image](https://media.discordapp.net/attachments/489366022172966922/1063762528158617681/image.png?width=500&height=130)
