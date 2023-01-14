@@ -6,9 +6,9 @@ namespace AGTHARN\EditExample;
 
 use pocketmine\event\Listener;
 use pocketmine\plugin\PluginBase;
-use AGTHARN\libOpenAI\api\EditsAPI;
 use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\utils\TextFormat;
+use AGTHARN\libOpenAI\Client;
 
 class EditExample extends PluginBase implements Listener
 {
@@ -25,7 +25,7 @@ class EditExample extends PluginBase implements Listener
                 return;
             }
 
-            EditsAPI::create('YOUR_API_KEY', $split[1], $split[0], 'text-davinci-edit-001', [], function (?array $result) {
+            Client::init('YOUR_API_KEY')->edits()->create($split[1], $split[0], 'text-davinci-edit-001', [], function (?array $result) {
                 if ($result !== null) {
                     $this->getServer()->broadcastMessage(TextFormat::GREEN . trim($result['choices'][0]['text']));
                 }

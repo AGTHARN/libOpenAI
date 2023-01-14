@@ -3,7 +3,7 @@
 
 ![image](https://media.discordapp.net/attachments/489366022172966922/1063325869340364830/0_c-PJKeN6JqEUKyZ8.png?width=600&height=337)
 
-A PocketMine-MP library which allows developers to make use of OpenAI's API. Please always keep this library up-to-date as this is subject to a lot of changes in the future. If you're attempting to use this library, please make sure you have a valid [OpenAI API key](https://beta.openai.com/account/api-keys).
+A PocketMine-MP library which allows developers to make use of OpenAI's API. Please always keep this library up-to-date as this is subject to a lot of changes in the future. If you're attempting to use this library, please make sure you have a valid [OpenAI API key](https://beta.openai.com/account/api-keys). OpenAI is not free to use and you will need to pay for it after spending your free credits.
 
 > **Note**: OpenAI is still in its early stages of development and some areas are still in beta. Please be cautious when using this library for production use. The [documentation](https://beta.openai.com/docs) on OpenAI's website should be read to fully understand the function of this library.
 

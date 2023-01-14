@@ -8,7 +8,6 @@ use Closure;
 use pocketmine\Server;
 use pocketmine\utils\Internet;
 use pocketmine\scheduler\AsyncTask;
-use AGTHARN\libOpenAI\api\CompletionsAPI;
 
 class Helper
 {
@@ -18,8 +17,8 @@ class Helper
      *
      * @param string $requestType The request type, e.g. POST, GET, etc.
      * @param string $apiKey Your OpenAI API key
-     * @param string $data The data to send to the API
      * @param string $apiURL OpenAI API URL
+     * @param string $data The data to send to the API
      * @param callable|null $callback Callback function to run when the request is complete
      * @param callable|null $callbackAsync Callback function to run when the request is complete (async)
      * @param int $timeout The timeout in seconds
@@ -28,13 +27,13 @@ class Helper
     public static function sendRequest(
         string $requestType,
         string $apiKey,
+        string $apiURL,
         string $data = '',
-        string $apiURL = CompletionsAPI::API_V1,
         ?callable $callback = null,
         ?callable $callbackAsync = null,
         int $timeout = 10
     ): mixed {
-        return ($callback === null && $callbackAsync === null) ? self::sendNormalRequest($requestType, $apiKey, $data, $apiURL, $timeout) : self::sendAsyncRequest($callback, $callbackAsync, $requestType, $apiKey, $data, $apiURL, $timeout);
+        return ($callback === null && $callbackAsync === null) ? self::sendNormalRequest($requestType, $apiKey, $apiURL, $data, $timeout) : self::sendAsyncRequest($callback, $callbackAsync, $requestType, $apiKey, $apiURL, $data, $timeout);
     }
 
     /**
@@ -45,8 +44,8 @@ class Helper
      *
      * @param string $requestType The request type, e.g. POST, GET, etc.
      * @param string $apiKey Your OpenAI API key
-     * @param string $data The data to send to the API
      * @param string $apiURL OpenAI API URL
+     * @param string $data The data to send to the API
      * @param int $timeout The timeout in seconds
      * @param bool $isResultArray Whether the result should be an array or an object
      * @return int|array|null
@@ -54,8 +53,8 @@ class Helper
     public static function sendNormalRequest(
         string $requestType,
         string $apiKey,
+        string $apiURL,
         string $data = '',
-        string $apiURL = CompletionsAPI::API_V1,
         int $timeout = 10,
         bool $isResultArray = true // false for object result
     ): mixed {
@@ -76,8 +75,8 @@ class Helper
      * @param callable $callbackAsync The callback to run when the request is completed (async)
      * @param string $requestType The request type, e.g. POST, GET, etc.
      * @param string $apiKey Your OpenAI API key
-     * @param string $data The data to send to the API
      * @param string $apiURL OpenAI API URL
+     * @param string $data The data to send to the API
      * @param int $timeout The timeout in seconds
      * @param bool $isResultArray Whether the result should be an array or an object
      * @return int The worker ID
@@ -87,8 +86,8 @@ class Helper
         ?callable $callbackAsync,
         string $requestType,
         string $apiKey,
+        string $apiURL,
         string $data = '',
-        string $apiURL = CompletionsAPI::API_V1,
         int $timeout = 10,
         bool $isResultArray = true // false for object result
     ): int {
@@ -118,28 +117,21 @@ class Helper
                 ])->getBody(), $this->isResultArray);
 
                 $this->setResult($decoded);
-                if ($this->isResultArray && isset($decoded['error']['message'])) {
-                    throw new \Exception($decoded['error']['message']);
-                } elseif (!$this->isResultArray && isset($decoded->error->message)) {
-                    throw new \Exception($decoded->error->message);
-                }
-
-                $callbackAsync = $this->callbackAsync;
-                if ($callbackAsync instanceof Closure) {
-                    $callbackAsync($decoded);
-                }
+                $this->callback($decoded, $this->callbackAsync);
             }
 
             public function onCompletion(): void
             {
-                $result = $this->getResult();
+                $this->callback($this->getResult(), $this->callback);
+            }
+
+            public function callback(mixed $result, Closure $callback = null): void {
                 if ($this->isResultArray && isset($result['error']['message'])) {
                     throw new \Exception($result['error']['message']);
                 } elseif (!$this->isResultArray && isset($result->error->message)) {
                     throw new \Exception($result->error->message);
                 }
 
-                $callback = $this->callback;
                 if ($callback instanceof Closure) {
                     $callback($result);
                 }

@@ -6,8 +6,8 @@ namespace AGTHARN\ImageExample;
 
 use pocketmine\event\Listener;
 use pocketmine\plugin\PluginBase;
-use AGTHARN\libOpenAI\api\ImagesAPI;
 use pocketmine\event\player\PlayerChatEvent;
+use AGTHARN\libOpenAI\Client;
 
 class ImageExample extends PluginBase implements Listener
 {
@@ -22,7 +22,7 @@ class ImageExample extends PluginBase implements Listener
             $prompt = str_replace('create image: ', '', $event->getMessage());
             $dataFolder = $this->getDataFolder();
 
-            ImagesAPI::create('YOUR_API_KEY', $prompt, [], null, function (?array $result) use ($dataFolder) {
+            Client::init('YOUR_API_KEY')->images()->create($prompt, [], null, function (?array $result) use ($dataFolder) {
                 if ($result !== null) {
                     $image = file_get_contents($result['data'][0]['url']);
                     if ($image !== false) {

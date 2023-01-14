@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace AGTHARN\libOpenAI\api;
+namespace AGTHARN\libOpenAI\api\type;
 
 use AGTHARN\libOpenAI\Helper;
+use AGTHARN\libOpenAI\api\API;
 
 /**
  * Given a prompt and an instruction, the model will return an edited version of the prompt.
  */
-class EditsAPI
+class Edits extends API
 {
     public const API_V1 = 'https://api.openai.com/v1/edits';
 
     /**
      * Creates a new edit for the provided input, instruction, and parameters
-     *
-     * @param string $apiKey Your OpenAI API key
+     * 
      * @param string $input The input text to use as a starting point for the edit.
      * @param string $instruction The instruction that tells the model how to edit the prompt.
      * @param string $model ID of the model to use. You can use the List models API to see all of your available models, or see OpenAI's Model overview for descriptions of them.
@@ -25,8 +25,7 @@ class EditsAPI
      * @param callable|null $callbackAsync Callback function to run when the request is complete (async)
      * @return int|array|null
      */
-    public static function create(
-        string $apiKey,
+    public function create(
         string $input,
         string $instruction,
         string $model = 'text-davinci-edit-001',
@@ -34,10 +33,10 @@ class EditsAPI
         ?callable $callback = null,
         ?callable $callbackAsync = null
     ): mixed {
-        return Helper::sendRequest('POST', $apiKey, json_encode(array_merge([
+        return Helper::sendRequest('POST', $this->apiKey, self::API_V1, json_encode(array_merge([
             'model' => $model,
             'input' => $input,
             'instruction' => $instruction
-        ], $extraData)), self::API_V1, $callback, $callbackAsync);
+        ], $extraData)), $callback, $callbackAsync);
     }
 }

@@ -11,20 +11,9 @@ Given a prompt, the model will return one or more predicted completions, and can
 
 [Example Plugin](https://github.com/AGTHARN/libOpenAI/tree/main/examples/CompletionExample)
 
-Method in `CompletionsAPI.php`:
+Usage:
 ```php
-public static function create(
-    string $apiKey,
-    string|array $prompt,
-    string $model = 'text-davinci-003',
-    array $extraData = [],
-    ?callable $callback = null
-)
-```
-
-Usage of `CompletionsAPI::create()`:
-```php
-CompletionsAPI::create('YOUR_API_KEY', 'what is 9+10?', 'text-davinci-003', [
+Client::init('YOUR_API_KEY')->completions()->create('what is 9+10?', 'text-davinci-003', [
     'max_tokens' => 2048 // NOTE: if you wonder why your replies are cut off, it's because the default is 16
 ], function (?array $result) {
     if ($result !== null) {
@@ -40,21 +29,9 @@ Given a prompt and an instruction, the model will return an edited version of th
 
 [Example Plugin](https://github.com/AGTHARN/libOpenAI/tree/main/examples/EditExample)
 
-Method in `EditsAPI.php`:
+Usage:
 ```php
-public static function create(
-    string $apiKey,
-    string $input,
-    string $instruction,
-    string $model = 'text-davinci-edit-001',
-    array $extraData = [],
-    ?callable $callback = null
-)
-```
-
-Usage of `EditsAPI::create()`:
-```php
-EditsAPI::create('YOUR_API_KEY', 'What day of the wek is it?', 'Fix the spelling mistakes', 'text-davinci-edit-001', [], function (?array $result) {
+Client::init('YOUR_API_KEY')->edits()->create('What day of the wek is it?', 'Fix the spelling mistakes', 'text-davinci-edit-001', [], function (?array $result) {
     if ($result !== null) {
         $this->getServer()->broadcastMessage(TextFormat::GREEN . trim($result['choices'][0]['text']));
     }
@@ -68,20 +45,10 @@ Given a prompt and/or an input image, the model will generate a new image. Relat
 
 [Example Plugin](https://github.com/AGTHARN/libOpenAI/tree/main/examples/ImageExample)
 
-Method in `ImagesAPI.php`:
-```php
-public static function create(
-    string $apiKey,
-    string $prompt,
-    array $extraData = [],
-    ?callable $callback = null
-)
-```
-
-Usage of `ImagesAPI::create()`:
+Usage:
 ```php
 // NOTE: use the asynchronous callback parameter provided to prevent file_put_contents from blocking the main thread
-ImagesAPI::create('YOUR_API_KEY', $prompt, [], null, function (?array $result) use ($dataFolder) {
+Client::init('YOUR_API_KEY')->images()->create('minecraft', [], null, function (?array $result) use ($dataFolder) {
     if ($result !== null) {
         $image = file_get_contents($result['data'][0]['url']);
         if ($image !== false) {
@@ -91,6 +58,6 @@ ImagesAPI::create('YOUR_API_KEY', $prompt, [], null, function (?array $result) u
 });
 ```
 
-prompt: `artificial intelligence in the future`
+prompt: `minecraft`
 
-![image](https://media.discordapp.net/attachments/489366022172966922/1063388559593197588/image.png?width=200&height=200)
+![image](https://media.discordapp.net/attachments/489366022172966922/1063619319302463529/image.png?width=300&height=300)
