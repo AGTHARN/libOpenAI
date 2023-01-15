@@ -10,7 +10,7 @@ This document is not yet completed! You may fully explore your options with the 
 ## ➡️ Completions
 Given a prompt, the model will return one or more predicted completions, and can also return the probabilities of alternative tokens at each position.
 
-[Example Plugin](https://github.com/AGTHARN/libOpenAI/tree/main/examples/CompletionExample)
+- [Example Plugin](https://github.com/AGTHARN/libOpenAI/tree/main/examples/CompletionExample)
 
 Usage:
 ```php
@@ -25,10 +25,12 @@ Client::init('YOUR_API_KEY')->completions()->create('what is 9+10?', 'text-davin
 
 ![image](https://media.discordapp.net/attachments/489366022172966922/1063339428266901554/image.png?width=1440&height=353)
 
+*Idea: Interactable Q&A bot after fine-tuning the model. This can greatly increase Fine-tuning training and Model usage costs if used irresponsibly.*
+
 ## ➡️ Edits
 Given a prompt and an instruction, the model will return an edited version of the prompt.
 
-[Example Plugin](https://github.com/AGTHARN/libOpenAI/tree/main/examples/EditExample)
+- [Example Plugin](https://github.com/AGTHARN/libOpenAI/tree/main/examples/EditExample)
 
 Usage:
 ```php
@@ -41,10 +43,12 @@ Client::init('YOUR_API_KEY')->edits()->create('What day of the wek is it?', 'Fix
 
 ![image](https://media.discordapp.net/attachments/489366022172966922/1063383533655162950/image.png?width=500&height=130)
 
-## ➡️ Images
-Given a prompt and/or an input image, the model will generate a new image. Related guide: [Image generation](https://beta.openai.com/docs/guides/images). *There are also image edits and image variations.*
+*Idea: Automatically fix spelling mistakes in chat. If I am not wrong, this does not incur any usage costs. However, this may change in the future so please confirm that yourself.*
 
-[Example Plugin](https://github.com/AGTHARN/libOpenAI/tree/main/examples/ImageExample)
+## ➡️ Images
+Given a prompt and/or an input image, the model will generate a new image. There are also image edits and image variations not shown in the example. Related guide: [Image generation](https://beta.openai.com/docs/guides/images).
+
+- [Example Plugin](https://github.com/AGTHARN/libOpenAI/tree/main/examples/ImageExample)
 
 Usage:
 ```php
@@ -63,11 +67,12 @@ prompt: `minecraft`
 
 ![image](https://media.discordapp.net/attachments/489366022172966922/1063619319302463529/image.png?width=300&height=300)
 
+*Idea: Allow players to generate images with a command and have it put up as maps on item frames. This can greatly increase DALL·E API usage costs if used irresponsibly.*
 
 ## ➡️ Moderations
 Given a input text, outputs if the model classifies it as violating OpenAI's content policy. Related guide: [Moderations](https://beta.openai.com/docs/guides/moderation).
 
-[Example Plugin](https://github.com/AGTHARN/libOpenAI/tree/main/examples/ModerationExample)
+- [Example Plugin](https://github.com/AGTHARN/libOpenAI/tree/main/examples/ModerationExample)
 
 Usage:
 ```php
@@ -79,3 +84,5 @@ Client::init('YOUR_API_KEY')->moderations()->create('I want to kill them.', [], 
 ```
 
 ![image](https://media.discordapp.net/attachments/489366022172966922/1063762528158617681/image.png?width=500&height=130)
+
+*Idea: Automatically filter out inappropriate messages. This can greatly increase Model usage costs if used irresponsibly.*
