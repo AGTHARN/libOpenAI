@@ -22,10 +22,8 @@ class CompletionExample extends PluginBase implements Listener
         if (count($this->getServer()->getOnlinePlayers()) === 1) {
             Client::init('YOUR_API_KEY')->completions()->create($event->getMessage(), 'text-davinci-003', [
                 'max_tokens' => 2048 // NOTE: if you wonder why your replies are cut off, it's because the default is 16
-            ], function (?array $result) {
-                if ($result !== null) {
-                    $this->getServer()->broadcastMessage(TextFormat::GREEN . trim($result['choices'][0]['text']));
-                }
+            ], function (array $result) {
+                $this->getServer()->broadcastMessage(TextFormat::GREEN . trim($result['choices'][0]['text']));
             });
         }
     }

@@ -116,24 +116,24 @@ class Helper
                     CURLOPT_CUSTOMREQUEST => $this->requestType
                 ])->getBody(), $this->isResultArray);
 
+                if ($decoded === null && json_last_error() !== JSON_ERROR_NONE) {
+                    throw new \Exception('Failed to decode JSON response.');
+                } elseif ($this->isResultArray && isset($decoded['error']['message'])) {
+                    throw new \Exception($decoded['error']['message']);
+                } elseif (!$this->isResultArray && isset($decoded->error->message)) {
+                    throw new \Exception($decoded->error->message);
+                }
+
                 $this->setResult($decoded);
-                $this->callback($decoded, $this->callbackAsync);
+                if ($this->callbackAsync instanceof Closure) {
+                    ($this->callbackAsync)($this->getResult());
+                }
             }
 
             public function onCompletion(): void
             {
-                $this->callback($this->getResult(), $this->callback);
-            }
-
-            public function callback(mixed $result, Closure $callback = null): void {
-                if ($this->isResultArray && isset($result['error']['message'])) {
-                    throw new \Exception($result['error']['message']);
-                } elseif (!$this->isResultArray && isset($result->error->message)) {
-                    throw new \Exception($result->error->message);
-                }
-
-                if ($callback instanceof Closure) {
-                    $callback($result);
+                if ($this->callback instanceof Closure) {
+                    ($this->callback)($this->getResult());
                 }
             }
         });

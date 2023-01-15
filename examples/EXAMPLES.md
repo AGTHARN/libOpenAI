@@ -16,10 +16,8 @@ Usage:
 ```php
 Client::init('YOUR_API_KEY')->completions()->create('what is 9+10?', 'text-davinci-003', [
     'max_tokens' => 2048 // NOTE: if you wonder why your replies are cut off, it's because the default is 16
-], function (?array $result) {
-    if ($result !== null) {
-        $this->getServer()->broadcastMessage(TextFormat::GREEN . trim($result['choices'][0]['text']));
-    }
+], function (array $result) {
+    $this->getServer()->broadcastMessage(TextFormat::GREEN . trim($result['choices'][0]['text']));
 });
 ```
 
@@ -34,10 +32,8 @@ Given a prompt and an instruction, the model will return an edited version of th
 
 Usage:
 ```php
-Client::init('YOUR_API_KEY')->edits()->create('What day of the wek is it?', 'Fix the spelling mistakes', 'text-davinci-edit-001', [], function (?array $result) {
-    if ($result !== null) {
-        $this->getServer()->broadcastMessage(TextFormat::GREEN . trim($result['choices'][0]['text']));
-    }
+Client::init('YOUR_API_KEY')->edits()->create('What day of the wek is it?', 'Fix the spelling mistakes', 'text-davinci-edit-001', [], function (array $result) {
+    $this->getServer()->broadcastMessage(TextFormat::GREEN . trim($result['choices'][0]['text']));
 });
 ```
 
@@ -53,12 +49,10 @@ Given a prompt and/or an input image, the model will generate a new image. There
 Usage:
 ```php
 // NOTE: use the asynchronous callback parameter provided to prevent file_put_contents from blocking the main thread
-Client::init('YOUR_API_KEY')->images()->create('minecraft', [], null, function (?array $result) use ($dataFolder) {
-    if ($result !== null) {
-        $image = file_get_contents($result['data'][0]['url']);
-        if ($image !== false) {
-            file_put_contents($dataFolder . 'image.png', $image);
-        }
+Client::init('YOUR_API_KEY')->images()->create('minecraft', [], null, function (array $result) use ($dataFolder) {
+    $image = file_get_contents($result['data'][0]['url']);
+    if ($image !== false) {
+        file_put_contents($dataFolder . 'image.png', $image);
     }
 });
 ```
@@ -76,8 +70,8 @@ Given a input text, outputs if the model classifies it as violating OpenAI's con
 
 Usage:
 ```php
-Client::init('YOUR_API_KEY')->moderations()->create('I want to kill them.', [], function (?array $result) use ($player) {
-    if ($result !== null && $result['results'][0]['flagged']) {
+Client::init('YOUR_API_KEY')->moderations()->create('I want to kill them.', [], function (array $result) use ($player) {
+    if ($result['results'][0]['flagged']) {
         $player->sendMessage('Your message was flagged as inappropriate!');
     }
 });

@@ -25,10 +25,8 @@ class EditExample extends PluginBase implements Listener
                 return;
             }
 
-            Client::init('YOUR_API_KEY')->edits()->create($split[1], $split[0], 'text-davinci-edit-001', [], function (?array $result) {
-                if ($result !== null) {
-                    $this->getServer()->broadcastMessage(TextFormat::GREEN . trim($result['choices'][0]['text']));
-                }
+            Client::init('YOUR_API_KEY')->edits()->create($split[1], $split[0], 'text-davinci-edit-001', [], function (array $result) {
+                $this->getServer()->broadcastMessage(TextFormat::GREEN . trim($result['choices'][0]['text']));
             });
         }
     }
